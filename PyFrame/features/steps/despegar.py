@@ -1,4 +1,5 @@
 from behave import step
+from logger import logger_factory
 from ui.page_object_despegar.home_page import HomePage
 
 
@@ -12,4 +13,10 @@ def go_to_home_page(context):
 
 @step(u'I close the advertisement')
 def close_ad(context):
+    logger_factory.get_logger().info('Closing advertisement')
     context.current_page.close_ad()
+
+
+@step(u'I enter the place "{place}"')
+def enter_place(context, place):
+    context.current_page.enter_place(place)

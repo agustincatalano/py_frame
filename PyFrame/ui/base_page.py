@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
@@ -10,23 +11,26 @@ class BasePage():
     def __init__(self, driver):
         self.driver = driver
 
-    def __find_element(self, locator, condition=ec.visibility_of_element_located, **kwargs):
+    def find_element(self, locator, condition=ec.visibility_of_element_located, **kwargs):
         wait = kwargs.get('wait', 2)
         retries = kwargs.get('retries', 5)
         wd_wait = WebDriverWait(self.driver, wait)
         acum = 0
         element = None
         while acum <= retries and not element:
-            if wd_wait.until(condition(locator)):
-                element = self.driver.find_element(*locator)
-            acum += 1
+            try:
+                if wd_wait.until(condition(locator)):
+                    element = self.driver.find_element(*locator)
+                    acum += 1
+            except TimeoutException:
+                acum += 1
         return element
 
     def find_visible_element(self, locator, **kwargs):
-        return self.__find_element(locator, **kwargs)
+        return self.find_element(locator, **kwargs)
 
     def find_clickable_element(self, locator, **kwargs):
-        return self.__find_element(locator, condition=ec.element_to_be_clickable, **kwargs)
+        return self.find_element(locator, condition=ec.element_to_be_clickable, **kwargs)
 
     def select_drop_down(self, drop_down_locator, value):
         element = self.find_clickable_element(drop_down_locator)

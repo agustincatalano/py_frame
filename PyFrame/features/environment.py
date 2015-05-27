@@ -3,12 +3,16 @@ from behaving.web import environment as behaveenv
 
 
 # esto hay que intentar sacarlo de aca y ponerlo en el otro environment
+from logger.logger_factory import initialize
+
+
 def before_all(context):
     context.default_browser = environ.get('BROWSER')
     if environ.get('GRID_URL'):
         context.remote_webdriver = True
         context.browser_args = {'url': environ.get('GRID_URL'),
                                 'browser': environ.get('BROWSER')}
+    initialize()
     behaveenv.before_all(context)
 
 
