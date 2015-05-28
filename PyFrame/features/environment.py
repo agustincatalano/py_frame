@@ -1,9 +1,9 @@
 from os import environ
 from behaving.web import environment as behaveenv
+from configobj import ConfigObj
+import os
 
-
-# esto hay que intentar sacarlo de aca y ponerlo en el otro environment
-from logger.logger_factory import initialize
+CONFIG = ConfigObj(os.path.join(os.getcwd(), "..", "config", "config.cfg"))
 
 
 def before_all(context):
@@ -12,7 +12,7 @@ def before_all(context):
         context.remote_webdriver = True
         context.browser_args = {'url': environ.get('GRID_URL'),
                                 'browser': environ.get('BROWSER')}
-    initialize()
+    context.screenshots_dir = os.path.join(os.getcwd(), CONFIG['screenshot']['dir'])
     behaveenv.before_all(context)
 
 

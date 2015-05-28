@@ -4,7 +4,7 @@ LOG_FILENAME = '..\logger\py_frame.log'
 my_logger = None
 
 
-def initialize():
+def __initialize():
     global my_logger
     my_logger = logging.getLogger('py_frame')
     my_logger.setLevel(logging.DEBUG)
@@ -19,5 +19,5 @@ def get_logger():
     if my_logger is not None:
         return my_logger
     else:
-        initialize()
+        __initialize()
         return my_logger
