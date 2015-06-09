@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from behave import step
 from logger import logger_factory
 from ui.page_object_despegar.home_page import HomePage

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 import json
 
@@ -67,10 +68,6 @@ class HttpStatusCodes():
     NOT_FOUND = 404
     METHOD_NOT_ALLOWED = 405
     ERROR = 500  # INTERNAL_SERVER_ERROR
-
-
-def get_http_status_code(status):
-    return getattr(HttpStatusCodes, status)
 
 
 def validate_status_in_response(response, status_code):

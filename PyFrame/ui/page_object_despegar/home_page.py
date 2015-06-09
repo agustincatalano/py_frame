@@ -8,8 +8,8 @@ class HomePage(BasePage):
 
     URL = u'http://www.despegar.com.ar/'
     TITLE = u'Vuelos, hoteles, paquetes y mucho más! | Despegar.com Argentina'
-    close_ad_loc = (By.CSS_SELECTOR, '.nibbler-common-overlay-close')
-    country_text_box = (By.CSS_SELECTOR, '.sbox-destination')
+    close_ad_loc = (By.CSS_SELECTOR, '.nibbler-common-overlay-closeffrfr')
+    country_text_box = (By.XPATH, '/html/body/div[2]/div[1]/div[1]/div/div[8]/div/div/div[1]/div[2]/input')
 
     def close_ad(self):
         self.find_clickable_element(self.close_ad_loc).click()

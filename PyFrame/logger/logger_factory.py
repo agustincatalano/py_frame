@@ -8,7 +8,6 @@ def __initialize():
     global my_logger
     my_logger = logging.getLogger('py_frame')
     my_logger.setLevel(logging.DEBUG)
-    # Add the log message handler to the logger
     handler = logging.FileHandler(LOG_FILENAME, mode='w')
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
