@@ -7,8 +7,8 @@ from ui.base_page import BasePage
 class HomePage(BasePage):
 
     URL = u'http://www.despegar.com.ar/'
-    TITLE = u'Vuelos, hoteles, paquetes y mucho más! | Despegar.com Argentina'
-    close_ad_loc = (By.CSS_SELECTOR, '.nibbler-common-overlay-closeffrfr')
+    TITLE = u'Vuelos, Hoteles, Paquetes y más! | Despegar.com Argentina'
+    close_ad_loc = (By.CSS_SELECTOR, '.nibbler-common-overlay-close')
     country_text_box = (By.XPATH, '/html/body/div[2]/div[1]/div[1]/div/div[8]/div/div/div[1]/div[2]/input')
 
     def close_ad(self):

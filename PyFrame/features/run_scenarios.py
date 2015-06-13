@@ -6,21 +6,23 @@ import traceback
 from behave import __main__ as behave_script
 import sys
 from configobj import ConfigObj
-from features import environment
-from reports.report_excel import test_report_xlsx
+import json
+from reports.report_excel import generate_report_xlsx
 
 
 ARGS = None
-GENERATE_REPORTS = False
 CONFIG = ConfigObj(os.path.join(os.getcwd(), "..", "config", "config.cfg"))
+REPORTS = '..\\reports'
+INFO_FILE = 'test_results.json'
+
 
 def main():
     __parse_arguments()
     __set_environment_variables()
     __set_variables_to_behave()
     __run_test_cases()
-    if GENERATE_REPORTS:
-        __generate_result_reports()
+    __generate_execution_reports()
+
 
 def __parse_arguments():
     parser = argparse.ArgumentParser(
@@ -86,25 +88,23 @@ def __run_test_cases():
         logging.error("Error al ejecutar los steps: " + str(e))
         traceback.print_exc()
 
+
+def __generate_execution_reports():
+    """ Do reporting. """
+    path_info = os.path.join(
+        os.path.abspath(REPORTS), INFO_FILE)
+    info_file = open(path_info, 'r')
+    json_output = info_file.read()
+    json_output = json.loads(json_output)
+    info_file.close()
+    try:
+        generate_report_xlsx.generate_report(json_output)
+    except Exception:
+        logging.error("Test execution reports have not been generated: " +
+                      str(sys.exc_info()[1]))
+        traceback.print_exc()
+
+
 #para leer el script, esto llama al main
 if __name__ == '__main__':
     main()
-
-def __generate_result_reports():
-    """ Do reporting. """
-    try:
-        types_list = CONFIG['reports']['types']
-        if not isinstance(types_list, list):
-            types_list = [types_list]
-        for report_type in types_list:
-            # if report_type.lower() == "html":
-                # test_report_html.generate_report()
-            if report_type.lower() == "xlsx":
-                test_report_xlsx.generate_report()
-            # elif report_type.lower() == "interop_csv":
-            #     test_report_interop_csv.generate_report()
-            # elif report_type.lower() == "xml":
-            #     test_report_xml.generate_report()
-    except:
-        logging.error("Test execution reports have not been generated: " + str(sys.exc_info()[1]))
-        traceback.print_exc()

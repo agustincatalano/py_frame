@@ -41,8 +41,8 @@ class BasePage():
             raise Exception('Unable to find drop down with locator %s' % str(drop_down_locator))
 
     def validate_title(self):
-        assert self.driver.title == self.TITLE, 'Title does not match. Expected: %s. Obtained: %s' % (self.TITLE,
-                                                                                                      self.driver.title)
+        assert self.driver.title == self.TITLE, u'Title does not match. Expected: %s. Obtained: %s' % \
+                                                (self.TITLE, self.driver.title)
 
     def get(self, url):
         self.driver.get(url)
