@@ -7,7 +7,9 @@ import json
 
 BEHAVE_TAGS_FILE = os.path.join("behave", "behave.tags")
 INFO_FILE = "results.json"
-OVERALL_STATUS_FILE = "overall_status.json"
+OVERALL_STATUS_FILE = "..\\reports\\passed"
+REPORTS = '..\\reports'
+INFO_FILE = "..\\reports\\results.json"
 
 
 def add_step_info(step, parent_node):
@@ -51,6 +53,7 @@ def add_step_info_background(step, parent_node):
 
 def generate_execution_info(context):
     """
+    aca tomamos los datos que genera el json
     Generate json with representation data of the ejecution
     :param context: the context of the ejecution
     :return: object json with representation of the ejecution
@@ -85,16 +88,10 @@ def generate_execution_info(context):
         "environment": environment_info,
         "features": feature_list
     }
-    path_info = os.path.join(os.path.abspath(os.environ.get('OUTPUT')),
+    path_info = os.path.join(os.path.join(os.path.abspath(REPORTS)),
                              INFO_FILE)
-    file_info = open(path_info, 'w')
-    file_info.write(json.dumps(output))
-    file_info.close()
-
-    path_info = os.path.join(os.path.abspath(os.environ.get('OUTPUT')),
-                             OVERALL_STATUS_FILE)
-    file_info = open(path_info, 'w')
-    file_info.write(json.dumps({"status": overall_status}))
+    file_info = open(path_info, 'w') #abre el json en modo escritura
+    file_info.write(json.dumps(output)) #escribimos el json con los resultados que recolecte
     file_info.close()
 
 

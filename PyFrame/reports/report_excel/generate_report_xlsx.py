@@ -18,6 +18,7 @@ END_COLUMN_UTIL = 9
 EXECUTION_REPORT = "Test Execution Report"
 EXECUTION_REPORT_SEL = "'%s'" % EXECUTION_REPORT + "!$%s"
 EXECUTION_REPORT_FUN = "=+'%s'" % EXECUTION_REPORT + "!$%s"
+REPORTS = '..\\reports'
 
 
 
@@ -27,17 +28,16 @@ CONFIG = ConfigObj(os.path.join(os.getcwd(), "..", "config", "config.cfg"))
 def generate_report(output):
     """genereate report in format xlsx"""
     features = output["features"]
-    # open template for copying xls
+    # creamos lo que tiene el excel
     work_book, work_sheet, template = _instance_template()
-
+    #recolecta los escenarios de la feature
     scenarios = sum([feature['scenarios'] for feature in features], [])
-
+    #exportamos los esteps
     __export_to_xlsx_steps(work_book, features)
-
+    #esportamos los graficos
     __export_to_xlsx_charts(work_book, scenarios)
-    work_book.save(
-        os.path.join(os.path.abspath(os.environ.get('OUTPUT')),
-                     'results.xlsx'))
+    #guardar
+    work_book.save(os.path.join(os.path.abspath(REPORTS), "results.xlsx"))
 
 
 def _instance_template():
@@ -52,21 +52,24 @@ def _instance_template():
     work_book = Workbook()
     work_sheet = work_book.get_active_sheet()
 
-
+    #retornamos el excel vacio pero armado, estructura.
     return work_book, work_sheet, template
 
 
 def __export_to_xlsx_steps(work_book, features):
-    """export to xlsx steps"""
+    """stylborder son los bordes de la tablita"""
 
     styleborder = Style(font=Font(bold=False), border=Border(top=Side(border_style='thin', color=colors.BLACK),
                                                             left=Side(border_style='thin', color=colors.BLACK),
                                                             bottom=Side(border_style='thin', color=colors.BLACK),
                                                             right=Side(border_style='thin', color=colors.BLACK)))
-
+    #tomamos los steps del .feature y demas
     steps = _gather_steps(features)
+    #nos paramos en la pestana activa
     work_sheet = Workbook.get_active_sheet(work_book)
+    # y le ponemos el titulo
     work_sheet.title = 'Execution Steps'
+    #nos paramos en la primer celda
     row_index = 1
 
     work_sheet['A1'].style = styleborder
@@ -82,6 +85,7 @@ def __export_to_xlsx_steps(work_book, features):
     work_sheet['F1'].style = styleborder
     work_sheet['F1'].value = 'Scenarios'
 
+    #por cada columna le agrega los datos y steps, etc
     for step in sorted(steps):
         cell = work_sheet.cell(row=row_index + 1, column=1)
         cell.value = step
@@ -96,9 +100,8 @@ def __export_to_xlsx_steps(work_book, features):
 
         cell.offset(column=3).style = styleborder
         cell.offset(column=4).value = '%.2fs' % steps[step]['total_duration']
-
-        cell.offset(column=5).value = steps[step]['scenario']
-        cell.offset(column=5).style = styleborder
+        # cell.offset(column=5).value = steps[step]['scenario']
+        # cell.offset(column=5).style = styleborder
         cell.offset(column=4).style = styleborder
         if len(step) > work_sheet.column_dimensions['A'].width:
             work_sheet.column_dimensions['A'].width = len(step)
@@ -106,15 +109,15 @@ def __export_to_xlsx_steps(work_book, features):
         work_sheet.column_dimensions['C'].width = 10
         work_sheet.column_dimensions['D'].width = 10
         work_sheet.column_dimensions['E'].width = 10
-        work_sheet.column_dimensions['F'].width = 20
+        # work_sheet.column_dimensions['F'].width = 20
         row_index += 1
 
         # le agrega filtro a la columna
-        work_sheet.auto_filter.ref = "F1:F" + str(row_index)
+        # work_sheet.auto_filter.ref = "F1:F" + str(row_index)
 
 
 def __export_to_xlsx_charts(work_book, scenarios):
-    """export to xlsx charts"""
+    """recorre los escenarios y creamos los graficos"""
 
     scenarios = [scenario for scenario in scenarios
                  if not any([tag in scenario.get('tags', [])
@@ -130,14 +133,16 @@ def __export_to_xlsx_charts(work_book, scenarios):
     total_skipped = sum(scenario['status'].count("skipped")
                         for scenario in scenarios)
 
+    #creamos la pestana y le damos le titulo
     work_sheet2 = Workbook.create_sheet(work_book)
     work_sheet2.title = "Metricas"
 
     work_sheet2.cell("O2").value = "Test automation rate:"
     work_sheet2.cell("O3").value = "Autoamatizados:"
     work_sheet2.cell("P3").value = total_passed + total_failed
-    work_sheet2.cell("O4").value = "No automatizados:"
+    work_sheet2.cell("O4").value = "Ignorados:"
     work_sheet2.cell("P4").value = total_skipped
+    #rango de referencia de donde toma los valores el grafico
     values = Reference(work_sheet2, (3, 16), pos2=(4, 16))
     labels = Reference(work_sheet2, (3, 15), pos2=(4, 15))
     __add_chart(work_sheet2, values, labels, "Test Automation Rate", top=60)
@@ -170,11 +175,10 @@ def _gather_steps(features):
     steps = {}
     for feature in features:
         for scenario in feature['scenarios']:
-            steps_back = [step for step in scenario['steps']]
-            for step in scenario['steps'] + steps_back:
-                if not step['name'] in scenario:
+            for step in scenario['steps']:
+                if not step['name'] in steps:
                     steps[step['name']] = {'quantity': 0, 'total_duration': 0,
-                                           'appearances': 0, 'scenario': scenario['name']}
+                                           'appearances': 0}
                 steps[step['name']]['appearances'] += 1
                 add = 1 if step['status'] != 'skipped' else 0
                 steps[step['name']]['quantity'] += add

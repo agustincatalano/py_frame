@@ -7,13 +7,13 @@ from behave import __main__ as behave_script
 import sys
 from configobj import ConfigObj
 import json
-from reports.report_excel import generate_report_xlsx
+from reports.report_excel import generate_report_xlsx as xlsx
 
 
 ARGS = None
 CONFIG = ConfigObj(os.path.join(os.getcwd(), "..", "config", "config.cfg"))
-REPORTS = '..\\features'
-INFO_FILE = 'results.json'
+REPORTS = '..\\reports'
+INFO_FILE = '..\\reports\\results.json'
 
 
 def main():
@@ -121,7 +121,7 @@ def __run_test_cases():
 
 
 def __generate_execution_reports():
-    """ Do reporting. """
+    """ crea el reporte, falta modificar """
     path_info = os.path.join(
         os.path.abspath(REPORTS), INFO_FILE)
     info_file = open(path_info, 'r')
@@ -129,7 +129,7 @@ def __generate_execution_reports():
     json_output = json.loads(json_output)
     info_file.close()
     try:
-        generate_report_xlsx.generate_report(json_output)
+        xlsx.generate_report(json_output)
     except Exception:
         logging.error("Test execution reports have not been generated: " +
                       str(sys.exc_info()[1]))
@@ -137,7 +137,7 @@ def __generate_execution_reports():
 
 
 def __create_paths():
-    """ Create directory hierarchy if not already there. """
+    """ Crea el directorio para generar le behave.log si es que no esta """
     project_paths = [environ['OUTPUT']]
 
     for path in project_paths:
