@@ -70,7 +70,7 @@ def generate_execution_info(context):
                 scenarios = feature_scenario.scenarios
 
             overall_status, scenario_list = _processing_scenarios(scenarios,
-                                                                  scenario_list)
+                                                                 scenario_list)
         if scenario_list:
             feature_info = dict()
             for attrib in ('name', 'status', 'duration'):
@@ -114,6 +114,7 @@ def _processing_background(scenario):
         scenario_background['steps'] = steps
     # return scenario_background
 
+
 def _processing_background_feature(feature):
     """
     Proccesing data background of the feature
@@ -128,6 +129,7 @@ def _processing_background_feature(feature):
         feature_background['name'] = feature.background.name
         feature_background['steps'] = steps
     return feature_background
+
 
 def _processing_scenarios(scenarios, scenario_list):
     """ Proccesing all scenario of the one feature
@@ -169,15 +171,3 @@ def _processing_scenarios(scenarios, scenario_list):
             scenario_list.append(scenario_info)
 
     return overall_status, scenario_list
-#
-# def _get_tags_behave():
-#     """ return the tags  take in ejecution for console
-#     :return: tags
-#     """
-#     behave_tags_path = os.path.join(os.path.abspath(os.environ.get('OUTPUT')),
-#                                     BEHAVE_TAGS_FILE)
-#     behave_tags_file = open(behave_tags_path, 'r')
-#     behave_tags = behave_tags_file.readline().strip()
-#     behave_tags_file.close()
-#
-#     return behave_tags.replace("@MANUAL", "False")

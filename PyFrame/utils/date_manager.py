@@ -17,9 +17,9 @@ def get_iso_format_date(date_as_string, _format=DEFAULT_FORMAT):
     return datetime.strptime(date_formatted, _format).date().isoformat()
 
 #TEST
-# print get_iso_format_date('04-27-1988')
-# print get_iso_format_date('04/27/5465')
-# print get_iso_format_date('30/05/1945', DAY_MONTH_YEAR_FORMAT)
-# print get_iso_format_date('1586/05/12', YEAR_MONTH_DAY_FORMAT)
-# print get_iso_format_date('30-05-4566', DAY_MONTH_YEAR_FORMAT)
-# print get_iso_format_date('7865-05-12', YEAR_MONTH_DAY_FORMAT)
+print get_iso_format_date('04-27-1988')
+print get_iso_format_date('04/27/5465')
+print get_iso_format_date('30/05/1945', DAY_MONTH_YEAR_FORMAT)
+print get_iso_format_date('1586/05/12', YEAR_MONTH_DAY_FORMAT)
+print get_iso_format_date('30-05-4566', DAY_MONTH_YEAR_FORMAT)
+print get_iso_format_date('7865-05-12', YEAR_MONTH_DAY_FORMAT)

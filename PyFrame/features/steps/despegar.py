@@ -15,6 +15,7 @@ def go_to_home_page(context):
 @step(u'I close the advertisement')
 def close_ad(context):
     logger_factory.get_logger().info('Closing advertisement')
+    logger_factory.get_logger().debug('Closing advertisement')
     context.current_page.close_ad()
 
 

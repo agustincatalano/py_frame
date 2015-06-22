@@ -13,7 +13,7 @@ def before_all(context):
         context.remote_webdriver = True
         context.browser_args = {'url': environ.get('GRID_URL'),
                                 'browser': environ.get('BROWSER')}
-    context.screenshots_dir = os.path.join(os.getcwd(), CONFIG['screenshot']['dir'])
+    context.screenshots_dir = os.path.join(os.getcwd(), CONFIG['results']['output_dir'], 'screenshots')
     behaveenv.before_all(context)
 
 

@@ -1,3 +1,4 @@
+
 Feature: test despegar
 
   @CATA
@@ -8,4 +9,16 @@ Feature: test despegar
     And I enter the place "Buenos Aires, Ciudad de Buenos Aires, Argentina"
     And Take a screentshot
 
-
+  Scenario: Test despegar2
+    Given open the browser
+    When I go to despegar home page
+    Then I close the advertisement
+    And I enter the place "Buenos Aires, Ciudad de Buenos Aires, Argentina"
+    And Take a screentshot
+  @CATA
+  Scenario: Test despegar3
+    Given open the browser
+    When I go to despegar home page
+    Then I close the advertisement
+    And I enter the place "Buenos Aires, Ciudad de Buenos Aires, Argentina"
+    And Take a screentshot
